@@ -1,7 +1,7 @@
 {
   "name": "cpuinfo",
   "description": "Hopefully an improvement to os.cpus().",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "homepage": "https://github.com/Quasic/cpuinfo",
   "authors": [
     "Quasic <qbasic010@aim.com> (https://github.com/Quasic)"

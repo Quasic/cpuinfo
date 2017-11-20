@@ -22,9 +22,6 @@ module.exports.getVirtualCPUNumber = (callback) => {
 	if (cpus && cpus.length)
 		callback(null, cpus.length);
 	else
-		getPossibleCPUNumber(
-			(err, n) => {
-				if (err)
 		getPresentCPUNumber(
 			(err, n) => {
 				if (err)
@@ -34,16 +31,9 @@ module.exports.getVirtualCPUNumber = (callback) => {
 		getCPUNumberFromProcStat(
 			(err, n) => {
 				if (err)
-		getProcCPUInfo(
-			(err, o) => {
-				if (err)
-					callback(err)
-				else
-					callback(err, o.length);
-			}
-		);
-				else
-					callback(err, n);
+		getCPUNumberFromProcCPUInfo(
+			(err, n) => {
+				callback(err, n);
 			}
 		);
 				else
@@ -122,7 +112,11 @@ const parseProcStatCPUNumber = (data, callback) => {
 		if (lines[i].substring(0,3) === "cpu")
 			n++;
 	callback(n ? null : new Error("No CPUs found"), n);
-}
+};
+const getCPUNumberFromProcCPUInfo =
+module.exports.getCPUNumber.fromProcCPUInfo = (callback) => {
+	callback(new Error("Not yet implemented"));
+};
 const getProcStat =
 module.exports.getProcStat = (callback) => {
 	fs.readFile(
