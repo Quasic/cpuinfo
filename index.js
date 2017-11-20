@@ -1,3 +1,5 @@
+(function(){
+"use strict";
 const
 	os = require("os"),
 	fs = require("fs");
@@ -144,3 +146,4 @@ const getProcCPUInfo =
 module.exports.getProcCPUInfo = (callback) => {
 	callback(new Error("Not yet implemented"));
 };
+})();

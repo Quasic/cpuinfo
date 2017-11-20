@@ -1,3 +1,4 @@
+"use strict";
 console.log("Testing cpuinfo for node-js");
 console.log(process.versions);
 let
@@ -37,7 +38,7 @@ console.log("os.cpus:");
 console.log(require("os").cpus());
 cpuinfo.getProcCPUInfo(
 	(err, cpus) => {
-		console.log("CPUInfo:");
+		console.log("procCPUInfo:");
 		if (err) console.error(err);
 		console.log(cpus);
 	}
