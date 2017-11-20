@@ -4,6 +4,7 @@ console.log(process.versions);
 let
 	E = null,
 	fs = require("fs"),
+	os = require("os"),
 	util = require("util"),
 	cpuinfo = require(".");
 
@@ -40,6 +41,19 @@ function getCount(){
 			}
 		);
 	else {
+		c = os.cpus();
+		console.log(
+			"os.cpus().length:\t"
+			+(
+				c
+				? c.length+"\t"+(
+					c.length === count[""].v
+					? "Same result"
+					: "Different result"
+				)
+				: "Error \t Error"
+			)
+			);
 		console.log("cpuinfo.getCPUNumber:");
 		for (var i in count) if (count.hasOwnProperty(i)) {
 			console.log(
@@ -64,7 +78,7 @@ mayfail(
 	cpuinfo.getProcCPUInfo
 );
 console.log("os.cpus:");
-console.log(require("os").cpus());
+console.log(os.cpus());
 
 //raw dump for debugging
 function dump(path) {
@@ -77,18 +91,20 @@ function dump(path) {
 		}
 	);
 }
-dump("/proc/cpuinfo");
-dump("/proc/stat");
-dump("/sys/devices/system/cpu/possible");
-dump("/sys/devices/system/cpu/present");
-fs.readdir(
-	"/sys/devices/system/cpu",
-	(err, files) => {
-		console.log("/sys/devices/system/cpu");
-		if (err) console.log(err);
-		console.log(files);
-	}
-);
+if (false) {
+	dump("/proc/cpuinfo");
+	dump("/proc/stat");
+	dump("/sys/devices/system/cpu/possible");
+	dump("/sys/devices/system/cpu/present");
+	fs.readdir(
+		"/sys/devices/system/cpu",
+		(err, files) => {
+			console.log("/sys/devices/system/cpu");
+			if (err) console.log(err);
+			console.log(files);
+		}
+	);
+}
 
 // The following must not fail, under assumed conditions, and should throw any errors:
 cpuinfo.getCPUNumber(
