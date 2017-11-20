@@ -20,26 +20,43 @@ function mayfail(m, f){
 }
 
 // simple counts
-mayfail(
-	"Number of CPUs according to /proc/stat:",
-	cpuinfo.getCPUNumber.fromProcStat
-);
-mayfail(
-	"Number of CPUs according to /proc/cpuinfo:",
-	cpuinfo.getCPUNumber.fromProcCPUInfo
-);
-mayfail(
-	"Number of CPUs according to /sys/devices/system/cpu/possible:",
-	cpuinfo.getCPUNumber.fromSysDevicesPossible
-);
-mayfail(
-	"Number of CPUs according to /sys/devices/system/cpu/present:",
-	cpuinfo.getCPUNumber.fromSysDevicesPresent
-);
-mayfail(
-	"Number of CPUs according to /sys/devices/system/cpu:",
-	cpuinfo.getCPUNumber.fromSysDevicesCPUDir
-);
+let count={"": null};
+for (var i in cpuinfo.getCPUNumber)
+	if( util.isFunction(cpuinfo.getCPUNumber[i]) )
+		count[i] = null;
+getCount();
+function getCount(){
+	var i, c = false;
+	for (i in count)
+		if (count.hasOwnProperty(i) && !count[i]) {
+			c = true;
+			break;
+		}
+	if (c)
+		(i ? cpuinfo.getCPUNumber[i] : cpuinfo.getCPUNumber)(
+			(err, n) => {
+				count[i] = {err:err, v:n};
+				process.nextTick(getCount);
+			}
+		);
+	else {
+		console.log("cpuinfo.getCPUNumber:");
+		for (var i in count) if (count.hasOwnProperty(i)) {
+			console.log(
+				i+":\t"
+				+count[i].v
+				+"\t"+(
+					count[i].err || (
+						count[i].v === count[""].v
+						? "Same result"
+						: "Different result"
+					)
+				)
+			);
+		}
+		if (count[""].err || !count[""].v) throw count[""].err || new Error("0 count");
+	}
+}
 
 // objects
 mayfail(
@@ -75,6 +92,7 @@ fs.readdir(
 
 // The following must not fail, under assumed conditions, and should throw any errors:
 cpuinfo.getCPUNumber(
+	// redundant check in case more complex one fails
 	(err, n) => {
 		console.log("Number of CPUs:");
 		console.log(n);
