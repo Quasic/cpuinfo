@@ -91,11 +91,11 @@ function dump(path) {
 		}
 	);
 }
-if (false) {
-	dump("/proc/cpuinfo");
-	dump("/proc/stat");
-	dump("/sys/devices/system/cpu/possible");
-	dump("/sys/devices/system/cpu/present");
+var dumpall = false;
+if (dumpall || false) dump("/proc/cpuinfo");
+if (dumpall || false) dump("/proc/stat");
+if (dumpall || false) dump("/sys/devices/system/cpu/possible");
+if (dumpall || false) dump("/sys/devices/system/cpu/present");
 	fs.readdir(
 		"/sys/devices/system/cpu",
 		(err, files) => {
@@ -104,7 +104,6 @@ if (false) {
 			console.log(files);
 		}
 	);
-}
 
 // The following must not fail, under assumed conditions, and should throw any errors:
 cpuinfo.getCPUNumber(
